@@ -1,0 +1,35 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+      <h2>Task Manager</h2>
+    </div>
+    <div class="panel-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>TaskId</th>
+            <th>Task</th>
+            <th>ParentTask</th>
+            <th>Priority</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let task of tasks | async">
+            <td>{{task.taskId}}</td>
+            <td>{{task.task}}</td>
+            <td>{{task.parentTaskId}}</td>
+            <td>{{task.priority}}</td>
+            <td>{{task.startDate | date: 'shortDate'}}</td>
+            <td>{{task.endDate | date: 'shortDate'}}</td>
+            <!-- <td>
+              <button (click)="deleteBook(book.bookId)" class="btn btn-danger">Delete</button>
+              <button (click)="editBook(book.bookId)" class="btn btn-info" style="margin-left: 10px">Edit</button>
+            </td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
