@@ -1,0 +1,16 @@
+.label {
+    padding: 0 3px;
+    font-weight: bold; 
+}
+
+.input {
+    width: 150px;
+}
+
+.parentDrpDwn {
+    width: 400px;
+}
+
+.taskInput {
+    width: 400px;
+}

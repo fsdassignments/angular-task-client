@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Task } from '../task';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TasksService } from '../tasks.service';
+import { ParentTasksService } from '../parent-tasks.service';
+import { Observable } from 'rxjs';
+import { ParentTask } from '../parent-task';
 
 @Component({
   selector: 'app-update-task',
@@ -12,31 +15,34 @@ export class UpdateTaskComponent implements OnInit {
 
   id: number;
   task: Task;
+  parentTasks: Observable<ParentTask[]>;
 
   constructor(private route: ActivatedRoute,private router: Router,
-    private taskService: TasksService) { }
+    private parentTasksService: ParentTasksService, private taskService: TasksService) { }
 
   ngOnInit() {
+    this.parentTasks = this.parentTasksService.getParentTasksList();
     this.task = new Task();
 
     this.id = this.route.snapshot.params['id'];
     
     this.taskService.getTask(this.id)
       .subscribe(data => {
-        console.log(data)
         this.task = data;
       }, error => console.log(error));
   }
 
-  updateEmployee() {
+  updateTask() {
     this.taskService.updateTask(this.id, this.task)
-      .subscribe(data => console.log(data), error => console.log(error));
+      .subscribe(data => {
+        this.gotoList();
+      }, error => console.log(error));
     this.task = new Task();
-    this.gotoList();
+    
   }
 
   onSubmit() {
-    this.updateEmployee();    
+    this.updateTask();    
   }
 
   gotoList() {

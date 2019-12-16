@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Task } from '../task';
 import { TasksService } from '../tasks.service';
 import { Router } from '@angular/router';
+import { ParentTasksService } from '../parent-tasks.service';
+import { Observable } from 'rxjs';
+import { ParentTask } from '../parent-task';
 
 @Component({
   selector: 'app-create-task',
@@ -10,13 +13,16 @@ import { Router } from '@angular/router';
 })
 export class CreateTaskComponent implements OnInit {
 
+  parentTasks: Observable<ParentTask[]>;
   task: Task = new Task();
+  selectedParent: number;
   submitted = false;
 
-  constructor(private taskService: TasksService,
+  constructor(private taskService: TasksService, private parentTasksService: ParentTasksService,
     private router: Router) { }
 
   ngOnInit() {
+    this.parentTasks = this.parentTasksService.getParentTasksList();
   }
 
   newEmployee(): void {
@@ -25,10 +31,14 @@ export class CreateTaskComponent implements OnInit {
   }
 
   save() {
+    this.task.parentTaskId = this.getSelectedParent();
     this.taskService.createTask(this.task)
-      .subscribe(data => console.log(data), error => console.log(error));
+      .subscribe(data => {
+        console.log(data);
+        this.gotoList();
+      }, 
+      error => console.log(error));
     this.task = new Task();
-    this.gotoList();
   }
 
   onSubmit() {
@@ -38,6 +48,10 @@ export class CreateTaskComponent implements OnInit {
 
   gotoList() {
     this.router.navigate(['/tasks']);
+  }
+
+  getSelectedParent(): number {
+    return this.selectedParent;
   }
 
 }

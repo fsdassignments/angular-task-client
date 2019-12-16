@@ -8,11 +8,13 @@
 
     <div class="form-group">
         <label for="parentTaskId">Parent Task</label>
-        <input type="number" class="form-control" id="priority" required [(ngModel)]="task.parentTaskId" name="parentTaskId">
+        <select class="form-control" [(ngModel)]="selectedParent" (change)="getSelectedParent()" name="selectedParent">
+            <option [ngValue]="pTask.parentId"  *ngFor="let pTask of parentTasks | async">{{pTask.parentTask}}</option>
+          </select>
       </div>
 
     <div class="form-group">
-      <label for="priority">Priority</label>
+      <label for="priority">Priority: {{task.priority}}</label>
       <input type="range" max="30" class="form-control" id="priority" required [(ngModel)]="task.priority" name="priority">
     </div>
 
@@ -28,7 +30,7 @@
 
     <div class="form-group">
         <label for="isFinished">Is Finished</label>
-        <input type="checkbox" class="form-control" id="isFinished" required [(ngModel)]="task.isFinished" name="isFinished">
+        <input type="checkbox" class="form-control isFinishedChkBox" id="isFinished" required [(ngModel)]="task.isFinished" name="isFinished">
     </div>
 
     <button type="submit" class="btn btn-success">Submit</button>
