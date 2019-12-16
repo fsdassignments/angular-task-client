@@ -16,12 +16,10 @@ export class TasksService {
   }
 
   createTask(task: Object): Observable<Object> {
-    console.log('create', task);
     return this.http.post(`${this.baseUrl}`, task);
   }
 
   updateTask(id: number, value: any): Observable<Object> {
-    console.log('update', value);
     return this.http.put(`${this.baseUrl}/${id}`, value);
   }
 
