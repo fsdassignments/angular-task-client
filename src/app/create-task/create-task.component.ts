@@ -34,7 +34,6 @@ export class CreateTaskComponent implements OnInit {
     this.task.parentTaskId = this.getSelectedParent();
     this.taskService.createTask(this.task)
       .subscribe(data => {
-        console.log(data);
         this.gotoList();
       }, 
       error => console.log(error));
