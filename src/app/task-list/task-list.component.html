@@ -1,35 +1,70 @@
 <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h2>Task Manager</h2>
-    </div>
-    <div class="panel-body">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>TaskId</th>
-            <th>Task</th>
-            <th>ParentTask</th>
-            <th>Priority</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let task of tasks | async">
-            <td>{{task.taskId}}</td>
-            <td>{{task.task}}</td>
-            <td>{{task.parentTaskId}}</td>
-            <td>{{task.priority}}</td>
-            <td>{{task.startDate | date: 'shortDate'}}</td>
-            <td>{{task.endDate | date: 'shortDate'}}</td>
-            <!-- <td>
-              <button (click)="deleteBook(book.bookId)" class="btn btn-danger">Delete</button>
-              <button (click)="editBook(book.bookId)" class="btn btn-info" style="margin-left: 10px">Edit</button>
-            </td> -->
-          </tr>
-        </tbody>
+  <div class="panel-body">
+    <div>
+      <table class="search-filters table table-bordered table-sm">
+        <tr>
+          <td colspan="2">
+            <label for="searchTask" class="label">Task name</label>
+            <input class="taskInput" type="text" id="searchTask" required [(ngModel)]="searchTask" name="searchTask">
+          </td>
+          <td colspan="2">
+              <label for="parentTaskId" class="label">Parent Task</label>
+              <select class="parentDrpDwn" [(ngModel)]="selectedParent" (change)="getSelectedParent()" name="selectedParent">
+                  <option [ngValue]="pTask.parentId"  *ngFor="let pTask of parentTasks | async">{{pTask.parentTask}}</option>
+              </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="searchPriorityFrom" class="label">Priority From</label>
+            <input class="input" type="text" id="searchPriorityFrom" required [(ngModel)]="searchPriorityFrom" name="searchPriorityFrom">
+          </td>
+          <td>
+            <label for="searchPriorityTo" class="label">Priority To</label>
+            <input class="input" type="text" id="searchPriorityTo" required [(ngModel)]="searchPriorityTo" name="searchPriorityTo">
+          </td>
+          <td>
+            <label for="searchStartDate" class="label">Start Date</label>
+            <input class="input" type="date" id="searchStartDate" required [(ngModel)]="searchStartDate" name="searchStartDate">
+          </td>
+          <td>
+            <label for="searchEndDate" class="label">End Date</label>
+            <input class="input" type="date" id="searchEndDate" required [(ngModel)]="searchEndDate" name="searchEndDate">
+          </td>
+        </tr>
       </table>
     </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>TaskId</th>
+          <th>Task</th>
+          <th>ParentTask</th>
+          <th>Priority</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks | async | taskFilter: searchTask: selectedParent: searchPriorityFrom: searchPriorityTo: searchStartDate: searchEndDate">
+          <td>{{task.taskId}}</td>
+          <td>{{task.task}}</td>
+          <td>
+            <select [(ngModel)]="task.parentTaskId">
+              <option [ngValue]="pTask.parentId" *ngFor="let pTask of parentTasks | async">{{pTask.parentTask}}</option>
+            </select>
+          </td>
+          <td>{{task.priority}}</td>
+          <td>{{task.startDate | date: 'shortDate'}}</td>
+          <td>{{task.endDate | date: 'shortDate'}}</td>
+          <td>
+            <button [disabled]="task.isFinished" (click)="updateTask(task.taskId)" class="btn btn-danger">Edit</button>
+            <button [disabled]="task.isFinished" (click)="endTask(task.taskId)" class="btn btn-info"
+              style="margin-left: 10px">End Task</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  
+</div>
